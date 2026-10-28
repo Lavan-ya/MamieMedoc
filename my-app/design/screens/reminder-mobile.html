@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_blank" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24..48,400..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@100..900&family=Nunito+Sans:wght@100..900&display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-surface": "#1a1c1a", "on-error": "#ffffff", "inverse-surface": "#2f312f", "on-primary-container": "#cbffc2", "surface-dim": "#dbdad7", "on-primary": "#ffffff", "on-secondary": "#ffffff", "secondary-container": "#fec330", "inverse-on-surface": "#f2f1ee", "on-tertiary-container": "#ffedeb", "surface-bright": "#faf9f6", "error-container": "#ffdad6", "on-secondary-container": "#6f5100", "tertiary-container": "#d02d2d", "primary-container": "#2e7d32", "secondary-fixed-dim": "#f8bd2a", "surface-tint": "#1b6d24", "error": "#ba1a1a", "on-tertiary": "#ffffff", "tertiary": "#ac0c18", "secondary-fixed": "#ffdfa0", "primary": "#0d631b", "surface-container-low": "#f4f3f1", "tertiary-fixed": "#ffdad6", "outline": "#707a6c", "surface": "#faf9f6", "secondary": "#795900", "background": "#faf9f6", "on-background": "#1a1c1a", "surface-container-highest": "#e3e2e0", "on-surface-variant": "#40493d", "primary-fixed-dim": "#88d982", "on-primary-fixed": "#002204", "on-tertiary-fixed-variant": "#930010", "on-error-container": "#93000a", "tertiary-fixed-dim": "#ffb3ac", "on-tertiary-fixed": "#410003", "outline-variant": "#bfcaba", "on-secondary-fixed": "#261a00", "inverse-primary": "#88d982", "surface-container": "#efeeeb", "surface-variant": "#e3e2e0", "primary-fixed": "a3f69c", "surface-container-lowest": "#ffffff", "on-primary-fixed-variant": "#005312", "surface-container-high": "#e9e8e5", "on-secondary-fixed-variant": "#5c4300" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "space-xl": "2.5rem", "margin": "1.25rem", "gutter-desktop": "2rem", "space-lg": "1.75rem", "margin-desktop": "3rem", "space-sm": "0.75rem", "space-md": "1.25rem", "space-xs": "0.5rem", "gutter": "1.25rem" }, fontFamily: { "body-xl": ["Atkinson Hyperlegible Next"], "headline-lg": ["Nunito Sans"], "headline-md": ["Nunito Sans"], "body-md": ["Atkinson Hyperlegible Next"], "label-md": ["Nunito Sans"], "label-lg": ["Nunito Sans"], "label-sm": ["Nunito Sans"], "headline-xl-mobile": ["Nunito Sans"], "headline-xl": ["Nunito Sans"], "headline-sm": ["Nunito Sans"], "body-lg": ["Atkinson Hyperlegible Next"] }, fontSize: { "body-xl": ["24px", { lineHeight: "34px", letterSpacing: "0.01em", fontWeight: "500" }], "headline-lg": ["30px", { lineHeight: "38px", letterSpacing: "-0.01em", fontWeight: "700" }], "headline-md": ["26px", { lineHeight: "34px", letterSpacing: "0em", fontWeight: "700" }], "body-md": ["20px", { lineHeight: "30px", letterSpacing: "0.01em", fontWeight: "400" }], "label-md": ["19px", { lineHeight: "26px", letterSpacing: "0.02em", fontWeight: "700" }], "label-lg": ["22px", { lineHeight: "28px", letterSpacing: "0.02em", fontWeight: "700" }], "label-sm": ["17px", { lineHeight: "24px", letterSpacing: "0.03em", fontWeight: "600" }], "headline-xl-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "800" }], "headline-xl": ["38px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "800" }], "headline-sm": ["22px", { lineHeight: "30px", letterSpacing: "0em", fontWeight: "700" }], "body-lg": ["21px", { lineHeight: "32px", letterSpacing: "0.01em", fontWeight: "400" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#faf9f6;color:#1a1c1a;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-lg text-body-lg text-on-surface flex flex-col min-h-screen pt-safe pb-safe"><main class="flex flex-col relative w-full px-margin bg-surface min-h-screen justify-center"><div class="flex flex-col w-full py-space-sm items-center">
+<div class="w-full max-w-md mx-auto flex flex-col items-center">
+<!-- Top Warm Status Visual: Gentle Pulsing Bell -->
+<div class="relative flex items-center justify-center mb-space-sm">
+<div class="absolute w-28 h-28 rounded-full bg-secondary-container/20 animate-ping opacity-60"></div>
+<div class="relative w-24 h-24 rounded-full bg-secondary-fixed flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-on-secondary-fixed text-[52px]" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+</div>
+</div>
+<!-- Time Badge & Headline -->
+<div class="inline-flex items-center gap-2 bg-surface-container-high px-5 py-2 rounded-full mb-space-xs shadow-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">schedule</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Midi • 12:30</span>
+</div>
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface text-center mb-space-md font-extrabold tracking-tight">
+      C'est l'heure de ton médicament
+    </h1>
+<!-- Audio Vocal Help Pill Button -->
+<button aria-label="Écouter le rappel vocalement" class="flex items-center gap-3 bg-surface-container-highest active:bg-secondary-fixed text-on-surface px-6 py-3 rounded-full shadow-sm mb-space-md transition-all active:scale-95 cursor-pointer" id="audio-read-btn" type="button">
+<span class="material-symbols-outlined text-primary text-[30px]" id="audio-icon" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+<span class="font-label-lg text-label-lg font-bold">Vocale : Écouter</span>
+</button>
+<!-- High-Emphasis Medication Card -->
+<div class="w-full bg-surface-container-lowest rounded-lg p-space-md shadow-md flex flex-col items-center text-center relative overflow-hidden mb-space-lg">
+<div class="w-full flex items-center justify-center gap-4 mb-space-xs">
+<div class="w-16 h-16 rounded-full bg-on-primary-container/40 flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[44px]" style="font-variation-settings: 'FILL' 1;">medication</span>
+</div>
+</div>
+<!-- Medicine Name -->
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold mb-1 tracking-normal">
+        Metformine
+      </span>
+<span class="font-headline-md text-headline-md text-primary font-bold mb-space-sm">
+        500 mg
+      </span>
+<!-- Dosage Details Pill -->
+<div class="w-full bg-surface-container-low rounded-DEFAULT p-space-sm flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-primary text-[32px]">pill</span>
+<span class="font-body-xl text-body-xl text-on-surface font-bold">
+          1 comprimé avec un verre d'eau
+        </span>
+</div>
+<!-- Meal Context Cue -->
+<div class="flex items-center gap-2 mt-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px]">restaurant</span>
+<span class="font-body-md text-body-md">À prendre au milieu du déjeuner</span>
+</div>
+</div>
+<!-- Huge Primary Affirmation Action Button -->
+<div class="w-full flex flex-col items-center gap-space-sm">
+<button class="w-full min-h-[78px] bg-primary-container active:bg-primary text-on-primary rounded-full px-6 py-4 flex items-center justify-center gap-4 shadow-xl transition-transform active:scale-[0.98] cursor-pointer" id="btn-taken" type="button">
+<span class="material-symbols-outlined text-on-primary text-[44px]" style="font-variation-settings: 'wght' 700;">check_circle</span>
+<span class="font-headline-md text-headline-md text-on-primary font-extrabold text-left leading-tight">
+          J'ai pris mon médicament
+        </span>
+</button>
+<!-- Reassuring Snooze Option -->
+<button class="w-full min-h-[64px] bg-surface-container active:bg-surface-container-high rounded-full px-6 py-3 flex items-center justify-center gap-3 text-on-surface-variant cursor-pointer transition-all" id="btn-snooze" type="button">
+<span class="material-symbols-outlined text-on-surface-variant text-[28px]">snooze</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface-variant text-center">
+          Me le rappeler dans 10 minutes
+        </span>
+</button>
+</div>
+<!-- Reassuring Caregiver Note -->
+<p class="font-body-md text-body-md text-on-surface-variant text-center mt-space-md opacity-80">
+      Une confirmation sera transmise avec amour à Sophie.
+    </p>
+<!-- Feedback Banner (Hidden by default, shown upon actions) -->
+<div class="hidden w-full mt-space-md bg-secondary-fixed text-on-secondary-fixed p-space-sm rounded-DEFAULT text-center font-headline-sm shadow-md" id="toast-confirmation">
+      Bien noté, Mamie ! Prends bien soin de toi.
+    </div>
+</div>
+</div>
+<script>
+  (function() {
+    const audioBtn = document.getElementById('audio-read-btn');
+    const takenBtn = document.getElementById('btn-taken');
+    const snoozeBtn = document.getElementById('btn-snooze');
+    const toast = document.getElementById('toast-confirmation');
+    const audioIcon = document.getElementById('audio-icon');
+
+    if (audioBtn) {
+      audioBtn.addEventListener('click', function() {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance("Bonjour Mamie. C'est l'heure de prendre ta Metformine 500 milligrammes. Un comprimé avec un verre d'eau pendant ton repas.");
+          utterance.lang = 'fr-FR';
+          utterance.rate = 0.85; // slower, clearer voice for elder comprehension
+          audioIcon.textContent = 'record_voice_over';
+          utterance.onend = function() {
+            audioIcon.textContent = 'volume_up';
+          };
+          window.speechSynthesis.speak(utterance);
+        } else {
+          audioIcon.textContent = 'graphic_eq';
+          setTimeout(() => { audioIcon.textContent = 'volume_up'; }, 2000);
+        }
+      });
+    }
+
+    if (takenBtn) {
+      takenBtn.addEventListener('click', function() {
+        if (toast) {
+          toast.textContent = "Bravo Mamie ! C'est enregistr\u00E9. Tr\u00E8s bon app\u00E9tit !";
+          toast.classList.remove('hidden');
+        }
+        takenBtn.style.opacity = '0.7';
+        takenBtn.disabled = true;
+      });
+    }
+
+    if (snoozeBtn) {
+      snoozeBtn.addEventListener('click', function() {
+        if (toast) {
+          toast.textContent = "D'accord Mamie, je te le rappellerai dans 10 minutes.";
+          toast.classList.remove('hidden');
+        }
+        snoozeBtn.style.opacity = '0.6';
+        snoozeBtn.disabled = true;
+      });
+    }
+  })();
+</script></main></body></html>

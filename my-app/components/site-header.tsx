@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useSyncExternalStore, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
+import { PROFILE_CHANGED_EVENT, readProfile } from "@/lib/profile";
 
 const NAV_ITEMS = [
   { label: "Family Dashboard", href: "#overview", active: true },
@@ -11,13 +12,40 @@ const NAV_ITEMS = [
   { label: "Care Circle", href: "#wellness", active: false },
 ];
 
+function subscribeToProfile(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(PROFILE_CHANGED_EVENT, onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(PROFILE_CHANGED_EVENT, onStoreChange);
+  };
+}
+
+function getProfileSnapshot() {
+  return readProfile();
+}
+
+function getServerProfileSnapshot() {
+  return null;
+}
+
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const profileId = useSyncExternalStore(
+    subscribeToProfile,
+    getProfileSnapshot,
+    getServerProfileSnapshot,
+  );
+  const navItems =
+    profileId && profileId !== "jeanne"
+      ? NAV_ITEMS.filter((item) => item.label !== "Mamie Jeanne Care View")
+      : NAV_ITEMS;
 
   return (
     <header className="topbar">
       <div className="topbar-main">
-        <a className="brand" href="#overview" aria-label="MamieMedoc dashboard home">
+        <a className="brand" href="/" aria-label="MamieMedoc dashboard home">
           <BrandMark className="brand-mark" />
           <span className="brand-name">
             Mamie<span>Medoc</span>
@@ -25,7 +53,7 @@ export function SiteHeader() {
         </a>
 
         <nav className="desktop-nav" aria-label="Primary navigation">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <a
               className={`nav-item${item.active ? " is-active" : ""}`}
               href={item.href}
@@ -72,7 +100,7 @@ export function SiteHeader() {
 
       {menuOpen ? (
         <nav className="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <a
               className={`mobile-nav-item${item.active ? " is-active" : ""}`}
               href={item.href}

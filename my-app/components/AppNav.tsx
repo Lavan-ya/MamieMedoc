@@ -26,13 +26,14 @@ type ProfileInfo = {
   image: string;
 };
 
+const mamieTab: NavTab = {
+  href: "/mamie",
+  label: "Mamie Jeanne Care View",
+  mobileLabel: "Mamie",
+  icon: "favorite",
+};
+
 const coreTabs: NavTab[] = [
-  {
-    href: "/mamie",
-    label: "Mamie Jeanne Care View",
-    mobileLabel: "Mamie",
-    icon: "favorite",
-  },
   {
     href: "/prescriptions",
     label: "Prescriptions & Stock",
@@ -140,7 +141,7 @@ export function AppNav() {
 
   const tabs = profileId
     ? profileId === "jeanne"
-      ? coreTabs
+      ? [mamieTab, ...coreTabs]
       : [familyTab, ...coreTabs]
     : [];
 

@@ -1,3 +1,75 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme {
+  /* Theme added on top of the teammate styles. */
+  --color-background: #faf9f6;
+  --color-surface: #faf9f6;
+  --color-surface-dim: #dbdad7;
+  --color-surface-bright: #faf9f6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f3f1;
+  --color-surface-container: #efeeeb;
+  --color-surface-container-high: #e9e8e5;
+  --color-surface-container-highest: #e3e2e0;
+  --color-surface-variant: #e3e2e0;
+  --color-surface-tint: #1b6d24;
+
+  --color-on-background: #1a1c1a;
+  --color-on-surface: #1a1c1a;
+  --color-on-surface-variant: #40493d;
+
+  --color-inverse-surface: #2f312f;
+  --color-inverse-on-surface: #f2f1ee;
+  --color-inverse-primary: #88d982;
+
+  --color-outline: #707a6c;
+  --color-outline-variant: #bfcaba;
+
+  --color-primary: #0d631b;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #2e7d32;
+  --color-on-primary-container: #cbffc2;
+  --color-primary-fixed: #a3f69c;
+  --color-primary-fixed-dim: #88d982;
+  --color-on-primary-fixed: #002204;
+  --color-on-primary-fixed-variant: #005312;
+
+  --color-secondary: #286b33;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #abf4ac;
+  --color-on-secondary-container: #2e7238;
+  --color-secondary-fixed: #abf4ac;
+  --color-secondary-fixed-dim: #90d792;
+  --color-on-secondary-fixed: #002107;
+  --color-on-secondary-fixed-variant: #07521d;
+
+  --color-tertiary: #794b00;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #9a6100;
+  --color-on-tertiary-container: #ffeedf;
+  --color-tertiary-fixed: #ffddb8;
+  --color-tertiary-fixed-dim: #ffb95f;
+  --color-on-tertiary-fixed: #2a1700;
+  --color-on-tertiary-fixed-variant: #653e00;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --font-headline: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+
+  --radius: 1rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 1.5rem;
+  --radius-lg: 2rem;
+  --radius-xl: 3rem;
+  --radius-full: 9999px;
+}
 :root {
   --page-bg: #e9efea;
   --frame: #c9d3cb;
@@ -2070,4 +2142,23 @@ ul {
   .dialog-actions .primary-button {
     flex: 1;
   }
+}
+
+/* Icon font loaded from Google Fonts in app/layout.tsx. */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

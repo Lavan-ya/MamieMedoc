@@ -1,0 +1,18 @@
+*[33m-[m[33m.[m   [33mdfa4198[m[33m ([m[1;35mrefs/stash[m[33m)[m On feature/hasna: UI  changes
+[31m|[m[32m\[m [33m\[m  
+[31m|[m [32m|[m * [33m5acecc2[m untracked files on feature/hasna: 8525a1b Merge pull request #1 from Lavan-ya/feature/Megha-bhatt
+[31m|[m * [33m9fb8ac8[m index on feature/hasna: 8525a1b Merge pull request #1 from Lavan-ya/feature/Megha-bhatt
+[31m|[m[31m/[m  
+[31m|[m *   [33m80501b5[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/hasna[m[33m)[m Merge pull request #3 from Lavan-ya/feature/lavanya
+[31m|[m [34m|[m[35m\[m  
+[31m|[m [34m|[m * [33m71a1111[m[33m ([m[1;31morigin/feature/lavanya[m[33m)[m feat: initial backend project setup
+[31m|[m [34m|[m[34m/[m  
+[31m|[m * [33mf984de2[m Merge pull request #2 from Lavan-ya/feature/next-feature
+[31m|[m[31m/[m[1;31m|[m 
+[31m|[m * [33mc33d250[m[33m ([m[1;31morigin/feature/next-feature[m[33m)[m Dashboard feature
+[31m|[m[31m/[m  
+*   [33m8525a1b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/feature/hasna[m[33m)[m Merge pull request #1 from Lavan-ya/feature/Megha-bhatt
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33m0985409[m[33m ([m[1;31morigin/feature/Megha-bhatt[m[33m)[m Implement MamieMedoc feature
+[1;32m|[m[1;32m/[m  
+* [33m5f9c946[m first commit

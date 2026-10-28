@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum TimeOfDay {
+  MORNING // Matin
+  MIDDAY // Midi
+  EVENING // Soir
+  BEDTIME // Coucher
+}
+
+enum DoseStatus {
+  PENDING // En attente
+  TAKEN // Pris
+  MISSED // Manqué
+  SKIPPED // Not needed (e.g. Doliprane "si douleur")
+}
+
+enum PrescriptionStatus {
+  DRAFT // Scanned, waiting for caregiver validation
+  ACTIVE // Ordonnance active
+  EXPIRED
+}
+
+enum RefillStatus {
+  PLANNED // "Je m'en occupe" – Jeudi matin
+  DONE
+}
+
+// ─────────────────────────────────────────────
+// MODELS
+// ─────────────────────────────────────────────
+
+model Patient {
+  id            Int            @id @default(autoincrement())
+  firstName     String // "Jeanne"
+  lastName      String // "Dupont"
+  birthDate     DateTime
+  avatarUrl     String?
+  familyMembers FamilyMember[]
+  prescriptions Prescription[]
+  medications   Medication[]
+}
+
+model FamilyMember {
+  id                 Int             @id @default(autoincrement())
+  patient            Patient         @relation(fields: [patientId], references: [id])
+  patientId          Int
+  firstName          String // "Lavanya"
+  relation           String // "Ma fille"
+  phone              String // "06 12 34 56 78"
+  avatarUrl          String?
+  availability       String? // "Disponible de suite"
+  isPrimaryCaregiver Boolean         @default(false) // receives "J'ai pris" confirmations
+  callOrder          Int             @default(0) // order on the Urgence screen
+  refillRequests     RefillRequest[]
+  confirmedDoses     DoseEvent[]
+}
+
+model Prescription {
+  id              Int                @id @default(autoincrement())
+  patient         Patient            @relation(fields: [patientId], references: [id])
+  patientId       Int
+  doctorName      String // "Dr. Vasseur"
+  doctorSpecialty String? // "Médecin généraliste"
+  clinicName      String? // "Cabinet Médical Saint-Louis"
+  clinicPhone     String?
+  pharmacyName    String? // "Pharmacie du Parc"
+  issuedAt        DateTime?
+  imageUrl        String? // scanned prescription photo
+  ocrConfidence   Float? // 98.4
+  status          PrescriptionStatus @default(DRAFT)
+  createdAt       DateTime           @default(now())
+  medications     Medication[]
+}
+
+model Medication {
+  id                    Int             @id @default(autoincrement())
+  patient               Patient         @relation(fields: [patientId], references: [id])
+  patientId             Int
+  prescription          Prescription?   @relation(fields: [prescriptionId], references: [id])
+  prescriptionId        Int?
+  name                  String // "Metformine"
+  strength              String // "500 mg"
+  activeIngredient      String? // "Chlorhydrate de metformine"
+  purpose               String? // "Régulation glycémique"
+  form                  String // "Comprimé", "Sachet", "Comprimé effervescent"
+  doseQuantity          Float           @default(1)
+  doseUnit              String // "comprimé", "sachet"
+  instruction           String // "avec un verre d'eau"
+  mealInstruction       String? // "Au milieu du déjeuner"
+  appearance            String? // "Sachet en papier blanc"
+  pillboxSection        String? // "Section 1"
+  asNeeded              Boolean         @default(false) // Doliprane "si douleur"
+  maxPerDay             Int? // 3
+  stockDoses            Int // 21
+  lowStockAlert         Boolean         @default(true)
+  lowStockThresholdDays Int             @default(7)
+  renewalDate           DateTime?
+  matchedInDatabase     Boolean         @default(false)
+  isActive              Boolean         @default(true)
+  slots                 ScheduleSlot[]
+  refillRequests        RefillRequest[]
+}
+
+model ScheduleSlot {
+  id           Int         @id @default(autoincrement())
+  medication   Medication  @relation(fields: [medicationId], references: [id])
+  medicationId Int
+  timeOfDay    TimeOfDay // MIDDAY
+  time         String // "12:30"
+  doses        DoseEvent[]
+}
+
+model DoseEvent {
+  id            Int           @id @default(autoincrement())
+  slot          ScheduleSlot  @relation(fields: [slotId], references: [id])
+  slotId        Int
+  scheduledAt   DateTime // exact date + time of this dose
+  status        DoseStatus    @default(PENDING)
+  takenAt       DateTime? // "Pris à 08:14"
+  snoozedUntil  DateTime? // "Me le rappeler dans 10 minutes"
+  confirmedBy   FamilyMember? @relation(fields: [confirmedById], references: [id])
+  confirmedById Int? // null = Jeanne confirmed herself; set = family "Mark done"
+
+  @@unique([slotId, scheduledAt])
+}
+
+model RefillRequest {
+  id             Int          @id @default(autoincrement())
+  medication     Medication   @relation(fields: [medicationId], references: [id])
+  medicationId   Int
+  familyMember   FamilyMember @relation(fields: [familyMemberId], references: [id])
+  familyMemberId Int
+  plannedFor     String // "Jeudi matin"
+  status         RefillStatus @default(PLANNED)
+  createdAt      DateTime     @default(now())
+}

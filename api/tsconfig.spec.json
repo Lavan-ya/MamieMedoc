@@ -1,0 +1,14 @@
+{
+  // Tests only. Jest runs CommonJS, so everything (including the ES-module
+  // NestJS 12 packages it compiles, see jest.config.ts) is emitted as CommonJS;
+  // "nodenext" would keep ESM for packages marked "type": "module".
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "allowJs": true,
+    "module": "commonjs",
+    "moduleResolution": "node10",
+    "resolvePackageJsonExports": false,
+    "ignoreDeprecations": "6.0"
+  }
+}

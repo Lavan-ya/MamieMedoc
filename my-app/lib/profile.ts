@@ -3,6 +3,21 @@ import { demoData } from "./demo-data";
 export const PROFILE_STORAGE_KEY = "mmd-profile";
 export const PROFILE_INFO_STORAGE_KEY = "mmd-profile-info";
 export const PROFILE_CHANGED_EVENT = "mmd-profile-change";
+/** Same key as localStorage, readable by the server. */
+export const PROFILE_COOKIE = "mmd-profile";
+/** "patient" or "family": what proxy.ts uses to decide which pages open. */
+export const PROFILE_TYPE_COOKIE = "mmd-profile-type";
+
+function setCookie(name: string, value: string | null) {
+  document.cookie = value
+    ? `${name}=${encodeURIComponent(value)}; path=/; max-age=31536000; samesite=lax`
+    : `${name}=; path=/; max-age=0; samesite=lax`;
+}
+
+function writeProfileCookies(profile: ProfileId | null, type: ProfileType | null) {
+  setCookie(PROFILE_COOKIE, profile);
+  setCookie(PROFILE_TYPE_COOKIE, type);
+}
 
 /** The demo profiles. Profiles added from the app can use any other key. */
 export const PROFILE_IDS = ["jeanne", "lavanya", "amar", "sophie"] as const;
@@ -25,10 +40,20 @@ export function isProfileId(value: unknown): value is ProfileId {
   return typeof value === "string" && value.trim() !== "";
 }
 
-/** Read the chosen profile. Returns null on the server or when unset/invalid. */
+function readProfileCookie() {
+  const match = document.cookie.match(new RegExp(`(?:^|; )${PROFILE_COOKIE}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
+
+/**
+ * Read the chosen profile. Returns null on the server or when unset/invalid.
+ * The cookie wins: it is what proxy.ts uses to decide which pages open.
+ */
 export function readProfile(): ProfileId | null {
   if (typeof window === "undefined") return null;
 
+  const fromCookie = readProfileCookie();
+  if (isProfileId(fromCookie)) return fromCookie;
   try {
     const stored = window.localStorage.getItem(PROFILE_STORAGE_KEY);
     return isProfileId(stored) ? stored : null;
@@ -116,6 +141,8 @@ export function saveProfile(
   if (typeof window === "undefined") return;
 
   try {
+    // Profiles from the database carry their type; demo keys fall back to the demo data.
+    writeProfileCookies(profile, info?.type ?? demoProfileInfo(profile)?.type ?? "family");
     window.localStorage.setItem(PROFILE_STORAGE_KEY, profile);
     if (info) {
       window.localStorage.setItem(
@@ -135,6 +162,7 @@ export function clearProfile(): void {
   if (typeof window === "undefined") return;
 
   try {
+    writeProfileCookies(null, null);
     window.localStorage.removeItem(PROFILE_STORAGE_KEY);
     window.localStorage.removeItem(PROFILE_INFO_STORAGE_KEY);
     window.dispatchEvent(new Event(PROFILE_CHANGED_EVENT));

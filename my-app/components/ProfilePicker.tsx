@@ -18,6 +18,7 @@ import {
   type Profile,
 } from "@/lib/api";
 import { demoData } from "@/lib/demo-data";
+import { homeFor } from "@/lib/access";
 import { saveProfile, type ProfileId, type ProfileType } from "@/lib/profile";
 
 type ProfileCard = {
@@ -112,7 +113,7 @@ export function ProfilePicker() {
       role: card.role,
       avatarUrl: card.image,
     });
-    router.push(card.type === "patient" ? "/mamie" : "/family");
+    router.push(homeFor(card.type));
   }
 
   function handleAdded(profile: Profile) {

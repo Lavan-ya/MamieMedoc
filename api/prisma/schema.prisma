@@ -47,9 +47,10 @@ model Patient {
   lastName      String // "Dupont"
   birthDate     DateTime
   avatarUrl     String?
-  familyMembers FamilyMember[]
-  prescriptions Prescription[]
-  medications   Medication[]
+  familyMembers     FamilyMember[]
+  prescriptions     Prescription[]
+  medications       Medication[]
+  pushSubscriptions PushSubscription[]
 }
 
 model FamilyMember {
@@ -119,6 +120,7 @@ model ScheduleSlot {
   medicationId Int
   timeOfDay    TimeOfDay // MIDDAY
   time         String // "12:30"
+  isActive     Boolean     @default(true) // false = intake time removed; kept for dose history
   doses        DoseEvent[]
 }
 
@@ -129,7 +131,9 @@ model DoseEvent {
   scheduledAt   DateTime // exact date + time of this dose
   status        DoseStatus    @default(PENDING)
   takenAt       DateTime? // "Pris à 08:14"
-  snoozedUntil  DateTime? // "Me le rappeler dans 10 minutes"
+  snoozedUntil  DateTime? // "Remind me in 15 minutes"
+  snoozeCount   Int           @default(0) // 3 snoozes, then a last reminder, then MISSED
+  remindedAt    DateTime? // last push notification sent for this dose
   confirmedBy   FamilyMember? @relation(fields: [confirmedById], references: [id])
   confirmedById Int? // null = Jeanne confirmed herself; set = family "Mark done"
 
@@ -145,4 +149,16 @@ model RefillRequest {
   plannedFor     String // "Jeudi matin"
   status         RefillStatus @default(PLANNED)
   createdAt      DateTime     @default(now())
+}
+
+// A device (Jeanne's tablet) that receives medication reminders by Web Push,
+// even when the browser is closed or the screen is locked.
+model PushSubscription {
+  id        Int      @id @default(autoincrement())
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  patientId Int
+  endpoint  String   @unique // push service URL for this browser
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
 }

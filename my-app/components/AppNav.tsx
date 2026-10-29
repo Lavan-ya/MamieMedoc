@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSyncExternalStore } from "react";
 
+import { isMamie } from "@/lib/access";
 import { demoData } from "@/lib/demo-data";
 import {
   PROFILE_CHANGED_EVENT,
@@ -26,33 +27,30 @@ type ProfileInfo = {
   image: string;
 };
 
-const coreTabs: NavTab[] = [
+const mamieTab: NavTab = {
+  href: "/mamie",
+  label: "Mamie Jeanne Care View",
+  mobileLabel: "Mamie",
+  icon: "favorite",
+};
+
+const prescriptionsTab: NavTab = {
+  href: "/prescriptions",
+  label: "Prescription Scan & Review",
+  mobileLabel: "Scan",
+  icon: "medication",
+};
+
+const familyTabs: NavTab[] = [
   {
-    href: "/mamie",
-    label: "Mamie Jeanne Care View",
-    mobileLabel: "Mamie",
-    icon: "favorite",
+    href: "/family",
+    label: "Family Dashboard",
+    mobileLabel: "Family",
+    icon: "dashboard",
   },
-  {
-    href: "/prescriptions",
-    label: "Prescriptions & Stock",
-    mobileLabel: "Meds",
-    icon: "medication",
-  },
-  {
-    href: "/care-circle",
-    label: "Care Circle",
-    mobileLabel: "Circle",
-    icon: "groups",
-  },
+  prescriptionsTab,
 ];
 
-const familyTab: NavTab = {
-  href: "/family",
-  label: "Family Dashboard",
-  mobileLabel: "Family",
-  icon: "dashboard",
-};
 
 function getProfileInfo(profileId: ProfileId): ProfileInfo {
   if (profileId === "jeanne") {
@@ -138,10 +136,12 @@ export function AppNav() {
     getServerProfileSnapshot,
   );
 
+  // Same split as proxy.ts: Jeanne sees her care view and the prescription
+  // scan; family members everything except her care view.
   const tabs = profileId
-    ? profileId === "jeanne"
-      ? coreTabs
-      : [familyTab, ...coreTabs]
+    ? isMamie(profileId)
+      ? [mamieTab, prescriptionsTab]
+      : familyTabs
     : [];
 
   const profile = profileId ? getProfileInfo(profileId) : null;

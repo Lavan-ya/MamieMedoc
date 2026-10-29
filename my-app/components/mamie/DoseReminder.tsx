@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 
-import { demoData, type Dose } from "@/lib/demo-data";
+import type { Dose } from "@/lib/demo-data";
+import { SNOOZE_MINUTES, type MamieDose } from "@/lib/mamie";
 
 function capitalizeFirst(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
@@ -16,21 +17,32 @@ function timingIcon(period: Dose["period"]) {
 
 export function DoseReminder({
   dose,
+  familyName,
+  busy = false,
   onTake,
   onRemind,
   onListen,
+  onCallFamily,
 }: {
-  dose: Dose;
+  dose: MamieDose;
+  /** Who is told when the dose is taken or missed, e.g. "Lavanya". */
+  familyName: string;
+  busy?: boolean;
   onTake: () => void;
   onRemind: () => void;
   onListen: () => void;
+  onCallFamily: () => void;
 }) {
+  // After the last snooze the reminder comes back once more, without snooze.
+  const canSnooze = dose.snoozesLeft > 0;
+
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Escape snoozes, like the button; the last reminder can't be dismissed.
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onRemind();
+      if (event.key === "Escape" && canSnooze && !busy) onRemind();
     }
 
     document.addEventListener("keydown", handleKeyDown);
@@ -39,7 +51,7 @@ export function DoseReminder({
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onRemind]);
+  }, [onRemind, canSnooze, busy]);
 
   const timeSlot = `${dose.period} · ${dose.time.replace(/^0/, "")}`;
 
@@ -141,11 +153,22 @@ export function DoseReminder({
             </div>
           </div>
 
+          {canSnooze ? null : (
+            <p
+              role="alert"
+              className="mb-4 w-full rounded-2xl bg-error-container px-4 py-3 text-center text-[20px] font-semibold leading-snug text-on-error-container"
+            >
+              Last reminder. If you don&apos;t take it now, {familyName} will
+              be told you missed it.
+            </p>
+          )}
+
           <button
             type="button"
             onClick={onTake}
+            disabled={busy}
             autoFocus
-            className="flex min-h-20 w-full items-center justify-center gap-3 rounded-full bg-primary-container px-6 py-4 text-[24px] font-extrabold text-on-primary shadow-xl transition-all hover:bg-primary active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="flex min-h-20 w-full items-center justify-center gap-3 rounded-full bg-primary-container px-6 py-4 text-[24px] font-extrabold text-on-primary shadow-xl transition-all hover:bg-primary active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60"
           >
             <span
               className="material-symbols-outlined text-[40px]"
@@ -158,24 +181,45 @@ export function DoseReminder({
             </span>
           </button>
 
+          {canSnooze ? (
+            <button
+              type="button"
+              onClick={onRemind}
+              disabled={busy}
+              className="mt-3 flex min-h-16 w-full flex-col items-center justify-center rounded-full bg-surface-container px-6 py-2 text-[20px] font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60"
+            >
+              <span className="flex items-center gap-3">
+                <span
+                  className="material-symbols-outlined text-[28px]"
+                  aria-hidden="true"
+                >
+                  snooze
+                </span>
+                <span className="text-center leading-tight">
+                  Remind me in {SNOOZE_MINUTES} minutes
+                </span>
+              </span>
+              <span className="text-[18px] font-normal">
+                {dose.snoozesLeft === 1
+                  ? "You can ask once more"
+                  : `You can ask ${dose.snoozesLeft} more times`}
+              </span>
+            </button>
+          ) : null}
+
           <button
             type="button"
-            onClick={onRemind}
-            className="mt-3 flex min-h-16 w-full items-center justify-center gap-3 rounded-full bg-surface-container px-6 text-[20px] font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-high focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            onClick={onCallFamily}
+            className="mt-3 flex min-h-14 w-full items-center justify-center gap-3 rounded-full px-6 text-[20px] font-semibold text-primary transition-colors hover:bg-surface-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <span
-              className="material-symbols-outlined text-[28px]"
-              aria-hidden="true"
-            >
-              snooze
+            <span className="material-symbols-outlined text-[26px]" aria-hidden="true">
+              call
             </span>
-            <span className="text-center leading-tight">
-              Remind me in 10 minutes
-            </span>
+            Call my family
           </button>
 
-          <p className="mt-5 text-center text-[18px] leading-relaxed text-on-surface-variant">
-            {demoData.refill.broughtBy} will be told with love that you took it.
+          <p className="mt-4 text-center text-[18px] leading-relaxed text-on-surface-variant">
+            {familyName} will be told with love that you took it.
           </p>
         </div>
       </div>

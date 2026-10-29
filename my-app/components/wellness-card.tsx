@@ -108,7 +108,25 @@ function GardenScene() {
   );
 }
 
-export function WellnessCard() {
+const MAX_BLOOMS = 6;
+
+type WellnessCardProps = {
+  /** Days in a row with every dose taken (from the adherence endpoint). */
+  streak: number;
+  /** Fully completed days over the last week. */
+  daysOnTrack: number;
+};
+
+function stage(blooms: number) {
+  if (blooms >= 5) return "Blooming";
+  if (blooms >= 3) return "Growing";
+  return "Sprouting";
+}
+
+export function WellnessCard({ streak, daysOnTrack }: WellnessCardProps) {
+  const blooms = Math.min(daysOnTrack, MAX_BLOOMS);
+  const progress = Math.round((blooms / MAX_BLOOMS) * 100);
+
   return (
     <section className="card wellness-card" id="wellness" aria-labelledby="wellness-title">
       <div className="wellness-topline">
@@ -116,32 +134,36 @@ export function WellnessCard() {
           <Sparkles size={13} strokeWidth={2} aria-hidden="true" />
           Wellness Streak
         </span>
-        <span className="level-pill">Level 4 &bull; Blooming</span>
+        <span className="level-pill">{stage(blooms)}</span>
       </div>
 
       <h2 id="wellness-title">Jeanne&apos;s Garden of Care</h2>
       <p className="wellness-copy">
-        Seven days of little wins, tended with love by everyone in her care circle.
+        {streak > 0
+          ? `${streak} ${streak === 1 ? "day" : "days"} in a row with every dose taken, tended with love by her care circle.`
+          : "Every day with all doses taken grows a new bloom in her garden."}
       </p>
 
       <GardenScene />
 
       <div className="garden-progress">
         <div className="garden-progress-label">
-          <span>4 of 6 blooms grown</span>
-          <strong>7 day streak</strong>
+          <span>
+            {blooms} of {MAX_BLOOMS} blooms grown
+          </span>
+          <strong>{streak}-day streak</strong>
         </div>
         <div
           className="progress-track"
           role="progressbar"
-          aria-valuenow={67}
+          aria-valuenow={progress}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-label="Garden growth"
         >
-          <span style={{ width: "67%" }} />
+          <span style={{ width: `${progress}%` }} />
         </div>
-        <p>2 more days until the next bloom</p>
+        <p>Take every dose today to grow the streak.</p>
       </div>
     </section>
   );

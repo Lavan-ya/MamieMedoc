@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "DoseEvent" ADD COLUMN "snoozeCount" INTEGER NOT NULL DEFAULT 0;

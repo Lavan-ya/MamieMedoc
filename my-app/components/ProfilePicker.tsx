@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { demoData } from "@/lib/demo-data";
+import { homeFor } from "@/lib/access";
 import { saveProfile, type ProfileId } from "@/lib/profile";
 
 type ProfileCard = {
@@ -48,7 +49,7 @@ export function ProfilePicker() {
 
   function handleSelect(profileId: ProfileId) {
     saveProfile(profileId);
-    router.push(profileId === "jeanne" ? "/mamie" : "/family");
+    router.push(homeFor(profileId));
   }
 
   return (

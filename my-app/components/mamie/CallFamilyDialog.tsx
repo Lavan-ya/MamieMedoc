@@ -3,14 +3,20 @@
 import Image from "next/image";
 import { useEffect } from "react";
 
-import { demoData } from "@/lib/demo-data";
+import {
+  EMERGENCY_NUMBER,
+  EUROPEAN_EMERGENCY_NUMBER,
+  type CallMember,
+} from "@/lib/mamie";
 import { telHref } from "@/lib/phone";
 
 export function CallFamilyDialog({
   open,
+  members,
   onClose,
 }: {
   open: boolean;
+  members: CallMember[];
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -50,10 +56,10 @@ export function CallFamilyDialog({
               id="call-family-title"
               className="font-headline text-[24px] font-bold tracking-tight text-on-surface"
             >
-              Call your family
+              Who do you want to call?
             </h2>
             <p className="text-[18px] leading-snug text-on-surface-variant">
-              Choose who you want to call.
+              Tap a name. Your phone will start the call.
             </p>
           </div>
           <button
@@ -72,8 +78,28 @@ export function CallFamilyDialog({
           </button>
         </div>
 
-        <div className="mt-4 flex flex-col gap-3">
-          {demoData.members.map((member) => (
+        <a
+          href={telHref(EMERGENCY_NUMBER)}
+          aria-label={`Call emergency services, ${EMERGENCY_NUMBER}`}
+          className="mt-4 flex min-h-16 items-center justify-between gap-3 rounded-2xl bg-error p-4 text-on-error shadow-md transition-colors hover:bg-on-error-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-error"
+        >
+          <span className="flex min-w-0 flex-col">
+            <span className="font-headline text-[22px] font-bold leading-tight">
+              Emergency · {EMERGENCY_NUMBER}
+            </span>
+            <span className="text-[18px] leading-tight">
+              Medical help (SAMU), day and night
+            </span>
+          </span>
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-on-error text-error">
+            <span className="material-symbols-outlined text-[26px]" aria-hidden="true">
+              emergency
+            </span>
+          </span>
+        </a>
+
+        <div className="mt-3 flex flex-col gap-3">
+          {members.map((member) => (
             <a
               key={member.id}
               href={telHref(member.phone)}
@@ -110,6 +136,17 @@ export function CallFamilyDialog({
             </a>
           ))}
         </div>
+
+        <p className="mt-4 text-center text-[18px] text-on-surface-variant">
+          Anywhere in Europe you can also call{" "}
+          <a
+            href={telHref(EUROPEAN_EMERGENCY_NUMBER)}
+            className="font-bold text-error underline underline-offset-4"
+          >
+            {EUROPEAN_EMERGENCY_NUMBER}
+          </a>
+          .
+        </p>
 
         <button
           type="button"

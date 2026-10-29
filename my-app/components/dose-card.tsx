@@ -1,14 +1,14 @@
-"use client";
-
-import { Check, Clock, Info, PillBottle } from "lucide-react";
+import { Check, Clock, Info, PillBottle, X } from "lucide-react";
 import type { Dose } from "@/lib/data";
 
 type DoseCardProps = {
   doses: Dose[];
-  onMarkDone: (id: string) => void;
+  patientName: string;
+  loading?: boolean;
 };
 
-export function DoseCard({ doses, onMarkDone }: DoseCardProps) {
+/** Read-only: family members see whether each dose was taken, and when. */
+export function DoseCard({ doses, patientName, loading = false }: DoseCardProps) {
   const takenCount = doses.filter((dose) => dose.status === "taken").length;
 
   return (
@@ -20,13 +20,21 @@ export function DoseCard({ doses, onMarkDone }: DoseCardProps) {
           </span>
           <div>
             <h2 id="doses-title">Today&apos;s Doses</h2>
-            <p>{doses.length} time slots scheduled for Grandma Jeanne</p>
+            <p>
+              {loading
+                ? "Loading today's schedule…"
+                : `${doses.length} ${doses.length === 1 ? "dose" : "doses"} scheduled for Grandma ${patientName}`}
+            </p>
           </div>
         </div>
         <span className="count-pill" aria-live="polite">
           <strong>{takenCount}</strong> of {doses.length} Taken
         </span>
       </div>
+
+      {!loading && doses.length === 0 ? (
+        <p className="dose-empty">No medication is scheduled for today.</p>
+      ) : null}
 
       <ul className="dose-list">
         {doses.map((dose) => (
@@ -59,40 +67,19 @@ export function DoseCard({ doses, onMarkDone }: DoseCardProps) {
                   <span className="status-check" aria-hidden="true">
                     <Check size={11} strokeWidth={3} />
                   </span>
-                  <span>
-                    <strong>Taken at</strong>
-                    <span>{dose.takenAt}</span>
-                  </span>
+                  <strong>Taken at {dose.takenAt}</strong>
                 </span>
-              ) : null}
-
-              {dose.status === "pending" ? (
-                <>
-                  <span className="dose-status dose-status--pending">
-                    <Clock size={14} strokeWidth={2.1} aria-hidden="true" />
-                    <span>
-                      <strong>Pending</strong>
-                      <span>Due Soon</span>
-                    </span>
-                  </span>
-                  <button
-                    type="button"
-                    className="mark-done-button"
-                    onClick={() => onMarkDone(dose.id)}
-                    aria-label={`Mark ${dose.name} ${dose.dosage} as taken`}
-                  >
-                    <Check size={12} strokeWidth={2.8} aria-hidden="true" />
-                    Mark Done
-                  </button>
-                </>
-              ) : null}
-
-              {dose.status === "scheduled" ? (
-                <span className="dose-status dose-status--scheduled">
-                  <Clock size={14} strokeWidth={2} aria-hidden="true" />
-                  Scheduled
+              ) : dose.status === "missed" ? (
+                <span className="dose-status dose-status--missed">
+                  <X size={14} strokeWidth={2.6} aria-hidden="true" />
+                  <strong>Missed</strong>
                 </span>
-              ) : null}
+              ) : (
+                <span className="dose-status dose-status--pending">
+                  <Clock size={14} strokeWidth={2.1} aria-hidden="true" />
+                  <strong>Pending</strong>
+                </span>
+              )}
             </div>
           </li>
         ))}

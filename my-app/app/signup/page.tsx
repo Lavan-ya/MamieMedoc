@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { AuthForm } from "@/components/auth/auth-form";
+import { AuthForm, DemoAccountButton } from "@/components/auth/auth-form";
 import {
   AuthBrand,
   AuthCard,
@@ -11,8 +11,6 @@ import {
   AuthFooter,
   AuthInfoBox,
   AuthPage,
-  authPrimaryButton,
-  authSecondaryButton,
   focusRing,
 } from "@/components/auth/auth-ui";
 import { PasswordField } from "@/components/auth/password-field";
@@ -71,7 +69,7 @@ export default function SignUpPage() {
             </AuthInfoBox>
           </div>
 
-          <AuthForm className="mt-6 flex flex-col gap-5">
+          <AuthForm mode="signup" className="mt-6 flex flex-col gap-5">
             <AuthField
               id="family-name"
               name="familyName"
@@ -117,16 +115,6 @@ export default function SignUpPage() {
               minLength={8}
               leftIcon="lock"
             />
-
-            <button type="submit" className={authPrimaryButton}>
-              <span>Create my family space</span>
-              <span
-                className="material-symbols-outlined text-[24px]"
-                aria-hidden="true"
-              >
-                arrow_forward
-              </span>
-            </button>
           </AuthForm>
 
           <div className="mt-5 text-center">
@@ -143,15 +131,7 @@ export default function SignUpPage() {
 
           <AuthDivider label="or explore first" />
 
-          <Link href="/profiles" className={authSecondaryButton}>
-            <span
-              className="material-symbols-outlined text-[24px]"
-              aria-hidden="true"
-            >
-              play_circle
-            </span>
-            <span>Try the demo account</span>
-          </Link>
+          <DemoAccountButton />
         </AuthCard>
 
         <AuthFooter />

@@ -1,42 +1,71 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useSyncExternalStore, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
+import {
+  PROFILE_CHANGED_EVENT,
+  readProfile,
+  readProfileInfo,
+} from "@/lib/profile";
 
 const NAV_ITEMS = [
-  { label: "Family Dashboard", href: "/family" },
-  { label: "Mamie Jeanne Care View", href: "/mamie" },
-  { label: "Prescriptions & Stock", href: "/prescriptions" },
-  { label: "Care Circle", href: "/family#wellness" },
+  { label: "Family Dashboard", href: "#overview", active: true },
+  { label: "Mamie Jeanne Care View", href: "#doses", active: false },
+  { label: "Prescriptions & Stock", href: "#inventory", active: false },
+  { label: "Care Circle", href: "#wellness", active: false },
 ];
+
+function subscribeToProfile(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(PROFILE_CHANGED_EVENT, onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(PROFILE_CHANGED_EVENT, onStoreChange);
+  };
+}
+
+function getProfileSnapshot() {
+  return readProfile();
+}
+
+function getServerProfileSnapshot() {
+  return null;
+}
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const profileId = useSyncExternalStore(
+    subscribeToProfile,
+    getProfileSnapshot,
+    getServerProfileSnapshot,
+  );
+  const navItems =
+    profileId && readProfileInfo()?.type !== "patient"
+      ? NAV_ITEMS.filter((item) => item.label !== "Mamie Jeanne Care View")
+      : NAV_ITEMS;
 
   return (
     <header className="topbar">
       <div className="topbar-main">
-        <Link className="brand" href="/family" aria-label="MamieMedoc dashboard home">
+        <a className="brand" href="/" aria-label="MamieMedoc dashboard home">
           <BrandMark className="brand-mark" />
           <span className="brand-name">
             Mamie<span>Medoc</span>
           </span>
-        </Link>
+        </a>
 
         <nav className="desktop-nav" aria-label="Primary navigation">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              className={`nav-item${item.href === pathname ? " is-active" : ""}`}
+          {navItems.map((item) => (
+            <a
+              className={`nav-item${item.active ? " is-active" : ""}`}
               href={item.href}
               key={item.label}
-              aria-current={item.href === pathname ? "page" : undefined}
+              aria-current={item.active ? "page" : undefined}
             >
               {item.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -75,16 +104,16 @@ export function SiteHeader() {
 
       {menuOpen ? (
         <nav className="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              className={`mobile-nav-item${item.href === pathname ? " is-active" : ""}`}
+          {navItems.map((item) => (
+            <a
+              className={`mobile-nav-item${item.active ? " is-active" : ""}`}
               href={item.href}
               key={item.label}
-              aria-current={item.href === pathname ? "page" : undefined}
+              aria-current={item.active ? "page" : undefined}
               onClick={() => setMenuOpen(false)}
             >
               {item.label}
-            </Link>
+            </a>
           ))}
           <div className="mobile-wellbeing">
             <span className="wellbeing-dot" aria-hidden="true" />

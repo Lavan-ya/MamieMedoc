@@ -8,8 +8,8 @@ import { useSyncExternalStore } from "react";
 import { demoData } from "@/lib/demo-data";
 import {
   PROFILE_CHANGED_EVENT,
-  readProfile,
-  type ProfileId,
+  readProfileInfo,
+  type ProfileInfo as SavedProfile,
 } from "@/lib/profile";
 
 type NavTab = {
@@ -23,7 +23,7 @@ type ProfileInfo = {
   name: string;
   shortName: string;
   role: string;
-  image: string;
+  image: string | null;
 };
 
 const mamieTab: NavTab = {
@@ -55,34 +55,22 @@ const familyTab: NavTab = {
   icon: "dashboard",
 };
 
-function getProfileInfo(profileId: ProfileId): ProfileInfo {
-  if (profileId === "jeanne") {
+function getProfileInfo(saved: SavedProfile): ProfileInfo {
+  // The patient keeps her full name and age from the demo data.
+  if (saved.type === "patient") {
     return {
       name: `${demoData.mamie.name}, ${demoData.mamie.age}`,
-      shortName: "Jeanne",
-      role: "Mamie",
-      image: demoData.mamie.image,
-    };
-  }
-
-  const member = demoData.members.find(
-    (candidate) => candidate.profile === profileId,
-  );
-
-  if (!member) {
-    return {
-      name: "Profile",
-      shortName: "Profile",
-      role: "",
-      image: demoData.mamie.image,
+      shortName: saved.firstName,
+      role: saved.role,
+      image: saved.avatarUrl ?? demoData.mamie.image,
     };
   }
 
   return {
-    name: member.name,
-    shortName: member.name,
-    role: member.role,
-    image: member.image,
+    name: saved.firstName,
+    shortName: saved.firstName,
+    role: saved.role,
+    image: saved.avatarUrl,
   };
 }
 
@@ -100,11 +88,11 @@ function subscribeToProfile(onStoreChange: () => void) {
   };
 }
 
-function getProfileSnapshot(): ProfileId | null {
-  return readProfile();
+function getProfileSnapshot(): SavedProfile | null {
+  return readProfileInfo();
 }
 
-function getServerProfileSnapshot(): ProfileId | null {
+function getServerProfileSnapshot(): SavedProfile | null {
   return null;
 }
 
@@ -133,19 +121,19 @@ export function AppNav() {
     getIsClient,
     getIsServer,
   );
-  const profileId = useSyncExternalStore(
+  const savedProfile = useSyncExternalStore(
     subscribeToProfile,
     getProfileSnapshot,
     getServerProfileSnapshot,
   );
 
-  const tabs = profileId
-    ? profileId === "jeanne"
+  const tabs = savedProfile
+    ? savedProfile.type === "patient"
       ? [mamieTab, ...coreTabs]
       : [familyTab, ...coreTabs]
     : [];
 
-  const profile = profileId ? getProfileInfo(profileId) : null;
+  const profile = savedProfile ? getProfileInfo(savedProfile) : null;
 
   const profileLink = profile ? (
     <Link
@@ -170,13 +158,22 @@ export function AppNav() {
         </span>
       </span>
       <span className="h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-primary-fixed">
-        <Image
-          src={profile.image}
-          alt=""
-          width={80}
-          height={80}
-          className="h-full w-full object-cover"
-        />
+        {profile.image ? (
+          <Image
+            src={profile.image}
+            alt=""
+            width={80}
+            height={80}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="flex h-full w-full items-center justify-center bg-primary-fixed font-headline text-[18px] font-bold text-on-primary-fixed"
+          >
+            {profile.shortName.charAt(0).toUpperCase()}
+          </span>
+        )}
       </span>
     </Link>
   ) : (

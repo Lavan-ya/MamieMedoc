@@ -3,7 +3,11 @@
 import { useSyncExternalStore, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
-import { PROFILE_CHANGED_EVENT, readProfile } from "@/lib/profile";
+import {
+  PROFILE_CHANGED_EVENT,
+  readProfile,
+  readProfileInfo,
+} from "@/lib/profile";
 
 const NAV_ITEMS = [
   { label: "Family Dashboard", href: "#overview", active: true },
@@ -38,7 +42,7 @@ export function SiteHeader() {
     getServerProfileSnapshot,
   );
   const navItems =
-    profileId && profileId !== "jeanne"
+    profileId && readProfileInfo()?.type !== "patient"
       ? NAV_ITEMS.filter((item) => item.label !== "Mamie Jeanne Care View")
       : NAV_ITEMS;
 

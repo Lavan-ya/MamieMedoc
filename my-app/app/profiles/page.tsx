@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import { ProfilePicker } from "@/components/ProfilePicker";
 
+import { SessionBar } from "./session-bar";
+
 export const metadata: Metadata = {
   title: "Choose your profile — MamieMédoc",
 };
@@ -31,6 +33,7 @@ export default function ProfilesPage() {
           <p className="mt-2 text-[20px] text-on-surface-variant">
             Choose your profile.
           </p>
+          <SessionBar />
         </header>
 
         <ProfilePicker />

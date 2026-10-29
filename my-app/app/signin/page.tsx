@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { AuthForm } from "@/components/auth/auth-form";
+import { AuthForm, DemoAccountButton } from "@/components/auth/auth-form";
 import {
   AuthBrand,
   AuthCard,
@@ -11,12 +11,11 @@ import {
   AuthFooter,
   AuthInfoBox,
   AuthPage,
-  authPrimaryButton,
-  authSecondaryButton,
   authTextLink,
   focusRing,
 } from "@/components/auth/auth-ui";
 import { PasswordField } from "@/components/auth/password-field";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/api";
 
 export const metadata: Metadata = {
   title: "Sign in — MamieMédoc",
@@ -63,7 +62,7 @@ export default function SignInPage() {
             </AuthInfoBox>
           </div>
 
-          <AuthForm className="mt-6 flex flex-col gap-5">
+          <AuthForm mode="signin" className="mt-6 flex flex-col gap-5">
             <AuthField
               id="email"
               name="email"
@@ -91,17 +90,11 @@ export default function SignInPage() {
                 </button>
               }
             />
-
-            <button type="submit" className={authPrimaryButton}>
-              <span>Sign in</span>
-              <span
-                className="material-symbols-outlined text-[24px]"
-                aria-hidden="true"
-              >
-                arrow_forward
-              </span>
-            </button>
           </AuthForm>
+
+          <p className="mt-4 text-center text-[16px] text-on-surface-variant">
+            Demo account: {DEMO_EMAIL} · {DEMO_PASSWORD}
+          </p>
 
           <div className="mt-5 text-center">
             <Link href="/signup" className={authTextLink}>
@@ -111,15 +104,7 @@ export default function SignInPage() {
 
           <AuthDivider label="or" />
 
-          <Link href="/profiles" className={authSecondaryButton}>
-            <span
-              className="material-symbols-outlined text-[24px]"
-              aria-hidden="true"
-            >
-              play_circle
-            </span>
-            <span>Try the demo account</span>
-          </Link>
+          <DemoAccountButton />
         </AuthCard>
 
         <AuthFooter />

@@ -12,7 +12,9 @@ async function bootstrap() {
     // No .env file: rely on the real environment.
   }
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors({ origin: 'http://localhost:3000' });
+  app.enableCors({
+  origin: (process.env.FRONTEND_URL ?? 'http://localhost:3000').split(','),
+});
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
